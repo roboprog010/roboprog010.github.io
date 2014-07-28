@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type='text/css' rel='stylesheet' href='../../stylesheets/stylesheet.css' />
+		<title>Dustin Snyder's DBC Technical Blog</title>
+	</head>
+	<body>
+		<nav id='table_of_contents'>
+			<a href='../../index.html'>Back to Table of Contents</a>
+		</nav>
+		<main>
+			<div class='post'>
+				<h2>CSS Positioning</h2>
+				<p>CSS has four different values for the position property: static, relative, absolute, and fixed. The following are short explanations about each position value and how it affects an HTML element's flow within a document. For the following examples we will be using these simple HTML and CSS documents. Please note that all of the images presented here have been cropped to highlight an area of interest and larger portions of the browser window will only be shown when necessary.</p>
+				<figure class='code'>
+					<p>
+						<span>&lt;!DOCTYPE html&gt;</span>
+						<span>&lt;html&gt;</span>
+						<span class='t1'>&lt;body&gt;</span>
+						<span class='t2'>&lt;div id='container'&gt;</span>
+						<span class='t3'>&lt;div id='d1'&gt;&lt;p&gt;Div 1&lt;/p&gt;&lt;/div&gt;</span>
+						<span class='t3'>&lt;div id='d2'&gt;&lt;p&gt;Div 2&lt;/p&gt;&lt;/div&gt;</span>
+						<span class='t3'>&lt;div id='d3'&gt;&lt;p&gt;Div 3&lt;/p&gt;&lt;/div&gt;</span>
+						<span class='t2'>&lt;/div&gt;</span>
+						<span class='t1'>&lt;/body&gt;</span>
+						<span>&lt;/html&gt;</span>
+					</p>
+					<figcaption>
+						Simple HTML used for our demonstration.
+					</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>#container {</span>
+						<span class='t1'>width: 450px;</span>
+						<span class='t1'>margin: 40px auto;</span>
+						<span class='t1'>text-align: center;</span>
+						<span class='t1'>border: 1px solid #000;</span>
+						<span>}</span>
+						<span>#container div {</span>
+						<span class='t1'>width: 100px;</span>
+						<span class='t1'>height: 100px;</span>
+						<span class='t1'>background-color: #ccc;</span>
+						<span class='t1'>margin: 25px;</span>
+						<span class='t1'>border: 2px solid #000;</span>
+						<span>}</span>
+						<span>#container div p {</span>
+						<span class='t1'>padding-top: 40px;</span>
+						<span>}</span>
+					</p>
+					<figcaption>
+						Simple CSS used for our demonstration.
+					</figcaption>
+				</figure>
+				<hr />
+				<div class='sub_post'>
+					<h3>Position: Static</h3>
+					<p>Static is the default position value for all elements in an HTML document. Statically positioned elements will arrange themselves according to whether they are block, inline, or inline-block by default. Without getting into too much detail block elements are given their own line and inline and inline-block elements occupy the same line. Statically positioned elements can not be moved using the top or left properties.</p>
+					<figure>
+						<img src='images/week2/static.png' alt='Static divs will occupy different lines.'>
+						<figcaption>
+							Statically positioned divs occupying separate lines according to normal HTML flow for block elements.
+						</figcaption>
+					</figure>
+				</div>
+				<div class='sub_post'>
+					<h3>Position: Relative</h3>
+					<p>Elements given a position of relative behave exactly like default static elements, however, they can now be repositioned using the left and top properties. Keep in mind that if repositioned, relatively positioned elements will still maintain their original place within the document.</p>
+					<figure class='code'>
+						<p>
+							<span>#d2 {</span>
+								<span class='t1'>position: relative;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of relative.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/relative.png' alt='Relative divs will occupy different lines unless given explicit values for the left or right attributes.'>
+						<figcaption>
+							Relatively positioned divs follow normal flow when not given explicit values for the left or right properties.
+						</figcaption>
+					</figure>
+					<figure class='code'>
+						<p>
+							<span>#d2 {</span>
+								<span class='t1'>position: relative;</span>
+								<span class='t1'>top: 50px;</span>
+								<span class='t1'>left: 50px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of relative and values for left and right of 50px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/relative-50-50.png' alt='Relative will move left or right relative to their original position in the HMTL flow the number of pixels that the left or right properties are set to while still maintaining their space within the document.'>
+						<figcaption>
+							Relatively positioned divs with left or right properties set will move relative to their original positions <em>however</em> the space in the document that the element originally occupied will still remain.
+						</figcaption>
+					</figure>
+					<figure class='code'>
+						<p>
+							<span>#d2 {</span>
+								<span class='t1'>position: relative;</span>
+								<span class='t1'>top: -50px;</span>
+								<span class='t1'>left: -50px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of relative and values for left and right of -50px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/relative-n50-n50.png' alt='Relative divs will occupy different lines unless given explicit values for the left or right attributes.'>
+						<figcaption>
+							Negative values can also be applied to the left or right properties to move an element left instead of right and up instead of down relative to it's original position.
+						</figcaption>
+					</figure>
+				</div>
+				<div class='sub_post'>
+					<h3>Position: Absolute</h3>
+					<p>An element with a position of absolute is removed from the normal flow of the document and positioned relative to the first ancestor element that has a position other than static or the document window if none is found. The space originally occupied by the element is not maintained. All absolutely positioned elements should be given explicit values for the left and top properties.</p>
+					<figure class='code'>
+						<p>
+							<span>#d2 {</span>
+								<span class='t1'>position absolute;</span>
+								<span class='t1'>top: 0px;</span>
+								<span class='t1'>left: 0px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of absolute and values for top and left of 0px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/absolute-0-0.png' alt=''>
+						<figcaption>
+							Since all of Div 2's ancestors are statically positioned Div 2 is positioned relative to the document window. There is a little space between Div 2 and the window due to Div 2 also having a margin of 25px <emd>which will affect where an element is positioned</em>. Also notice that Div 2's original position is not maintained.
+						</figcaption>
+					</figure>
+						<figure class='code'>
+							<p>
+								<span>#container { position: relative; }</span>
+								<span>#d2 {</span>
+									<span class='t1'>position absolute;</span>
+									<span class='t1'>top: 0px;</span>
+									<span class='t1'>left: 0px;</span>
+								<span>}</span>
+							</p>
+							<figcaption>
+								Div 2 has been given a position value of absolute and values for top and left of 0px <em>and</em> it's parent div has been given a position of relative.
+							</figcaption>
+						</figure>
+						<figure>
+							<img src='images/week2/absolute-0-0-relative.png' alt=''>
+							<figcaption>
+								Div 2 is still removed from the flow of the document, but now it is positioned relative to it's parent div which now has a position value of relative. Also, notice that Div 2 now sits on top of Div 1 since they both have the same margin and are both positioned at the top left of their parent div; Div 1 implicitly and Div 2 explicitly. This happens because Div 2 comes after Div 1 on the same level of the DOM. This can be changed by giving Div 1 a higher z-index property value.
+							</figcaption>
+						</figure>
+					<figure class='code'>
+						<p>
+							<span>#container { position: relative; }</span>
+							<span>#d2 {</span>
+								<span class='t1'>position absolute;</span>
+								<span class='t1'>top: 50px;</span>
+								<span class='t1'>left: 50px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of absolute and values for top and left of 50px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/absolute-50-50-relative.png' alt=''>
+						<figcaption>
+							Div 2 is now given positive values for it's top and left properties which moves it down and to the right 50px relative to it's parent div.
+						</figcaption>
+					</figure>
+					<figure class='code'>
+						<p>
+							<span>#container { position: relative; }</span>
+							<span>#d2 {</span>
+								<span class='t1'>position absolute;</span>
+								<span class='t1'>top: -50px;</span>
+								<span class='t1'>left: -50px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of absolute and values for top and left of -50px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/absolute-n50-n50-relative.png' alt=''>
+						<figcaption>
+							Div 2 is now given negative values for it's top and left properties which moves it up and to the left 50px relative to it's parent div. As you can see if an element is given a large enough value you can actually move it off of the page, which is a useful technique for dialog boxes and the like.
+						</figcaption>
+					</figure>
+				</div>
+				<div class='sub_post'>
+					<h3>Position: Fixed</h3>
+					<p>Elements with a position of fixed are removed from the normal flow of the document and positioned relative to the document window. Fixed positioned elements can be positioned using the top and left properties and that element will stay in the same position on the screen even if the document is scrolled horizontally or vertically. This is useful for navigation bars, control panels, and calls to action that you would like visible regardless of where a visitor is in a document. Fixed positioned elements should be given explicit values for the top and left properties just like absolutely positioned elements.</p>
+					<figure class='code'>
+						<p>
+							<span>#d2 {</span>
+								<span class='t1'>position fixed;</span>
+								<span class='t1'>top: 0px;</span>
+								<span class='t1'>left: 0px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of fixed and values for top and left of 0px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/fixed-0-0.png' alt=''>
+						<figcaption>
+							Elements with a position of fixed will position them similarly to absolutely positioned elements as you can see with Div 2 here. However, they can only be positioned relative to the window and they will stay in that position regardless of scrolling.
+						</figcaption>
+					</figure>
+					<figure class='code'>
+						<p>
+							<span>#d2 {</span>
+								<span class='t1'>position fixed;</span>
+								<span class='t1'>top: 50px;</span>
+								<span class='t1'>left: 50px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of fixed and values for top and left of 50px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/fixed-50-50.png' alt=''>
+						<figcaption>
+							Div 2 has moved 50px to the right and down relative to the document window.
+						</figcaption>
+					</figure>
+					<figure class='code'>
+						<p>
+							<span>#d2 {</span>
+								<span class='t1'>position fixed;</span>
+								<span class='t1'>top: -50px;</span>
+								<span class='t1'>left: -50px;</span>
+							<span>}</span>
+						</p>
+						<figcaption>
+							Div 2 has been given a position value of fixed and values for top and left of -50px.
+						</figcaption>
+					</figure>
+					<figure>
+						<img src='images/week2/fixed-n50-n50.png' alt=''>
+						<figcaption>
+							Div 2 has moved 50px to the left and up relative to the document window.
+						</figcaption>
+					</figure>
+				</div>
+				<div class='sub_post'>
+					<h3>Summary</h3>
+					<p>Static is the default position value for all HTML elements on the page and causes block elements to occupy separate lines and inline and inline-block elements to occupy the same line and these positions cannot be changed using top or left properties. Relative positioned elements are positioned relative to their original location in the document using the top and left properties while their original space in the document is maintained. Absolutely positioned elements are removed from the normal flow of a document and positioned relative to the first ancestor element with a position other than static or the document window if none are found. Absolutely positioned elements do not retain their original space within the document. Fixed position elements are also removed from the normal flow of an HTML document and are positioned relative to the document window using the top and left properties.  Elements with a fixed position will not move regardless of scrolling and their original space within the document is not maintained.</p>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<p>&copy; 2014 Dustin Snyder All Rights Reserved.</p>
+		</footer>
+	</body>
+</html>

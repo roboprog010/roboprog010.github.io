@@ -1,0 +1,57 @@
+@font-face {
+  font-family: 'Lobster';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lobster'), url(http://fonts.gstatic.com/s/lobster/v9/NIaFDq6p6eLpSvtV2DTNDQLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
+}
+
+body {
+  font-size: 100%;  
+}
+.wrapper {
+    width: 96%;
+    margin: 0 auto;
+}
+header {
+    padding: 2em;
+    background-color: #ccc;
+}
+nav {
+    margin: 1em 0 1em 0;
+    padding: 2em 0;
+    background-color: #ddd;
+}
+ul {
+    list-style:none;
+    background-color: #666;
+    padding: 0;
+}
+ul li {
+    margin-left:0;
+    display: inline;
+    margin-right:0.1em;
+    background-color: #999;
+}
+.left {
+    width: 72.5%;
+    background-color: #ccc;
+    float: left;
+    margin-bottom: 1em;
+}
+.right {
+    width: 25%;
+    background-color: #999;
+    float: right;
+    margin-bottom: 1em;
+}
+footer {
+    clear: both;
+    background-color:#666;
+}
+.left img {
+    width: 96%;
+    padding: 2%;
+}
+header h1 {
+    font-family: 'Lobster', cursive;
+}   
