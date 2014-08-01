@@ -1,0 +1,62 @@
+An asteroids game should have:
+	a map
+	a ship
+	asteroids
+	weapon upgrades
+	shield upgrades
+	message board
+	score counter
+	object driver
+	collision detector
+	level counter
+	beginning and ending sequences
+	repopulation function
+Define a Map
+	A Map should have:
+		height
+		width
+Define a SpaceShip
+	A SpaceShip should have a:
+		position
+		dimensions
+		vertical speed
+		horizontal speed
+		acceleration rate
+		weapons (three types)
+			space canon: weapon blast (three levels)
+			pulse array: energy pulse
+			nuke: nuke
+		fire rate
+		shields (three levels)
+	A SpaceShip should be able to:
+		accelerate vertical and horizontal
+		fire
+		upgrade weapons
+		upgrade shields
+		move
+		explode
+	A SpaceShip should not be able to:
+		move off the map
+Define a WeaponBlast
+	A WeaponBlast should have:
+		id
+		position
+		dimensions
+		vertical speed
+	A WeaponBlast should be able to do:
+		move
+		evaporate (upon exiting the Map)
+		destroy asteroids
+Define an Asteroid
+	An Asteroid should have:
+		id
+		position
+		dimensions
+		vertical speed
+		horizontal speed
+	An Asteroid should be able to do:
+		move
+		evaporate (upon being hit by a WeaponBlast)
+		damage or destroy ships
+	An Asteroid should not be able to do:
+		move off the stage

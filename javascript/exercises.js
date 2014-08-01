@@ -1,9 +1,9 @@
 $(document).ready(function(){
-	wH = $(window).height();
-	navH = $('#table_of_contents').height();
-	footerH = $('footer').height();
-	iframeNewHeight = wH - navH - footerH;
-	url = window.location.href;
+	var wH = $(window).height();
+	var navH = $('#table_of_contents').height();
+	var footerH = $('footer').height();
+	var iframeNewHeight = wH - navH - footerH;
+	var url = window.location.href;
 	url = url.replace(/.*url=/i,'');
 	$('#exercise_container').attr('src',url).css('height',iframeNewHeight + 'px');
 });
