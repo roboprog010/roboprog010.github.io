@@ -24,7 +24,7 @@ function Map() {
 	};
 	this.messageBoard = {
 		start: '<h1>This webpage has been <em>invaded</em> by DIVs!! Be a true Web Dev Hero and <em>destroy</em> those '+
-				'DIVs with your SEMANTIC CANON!!</h1><h1>User your arrow keys to navigate and the space bar to FIRE!!</h1>'+
+				'DIVs with your SEMANTIC CANON!!</h1><h1>Use your arrow keys to navigate and the space bar to FIRE!!</h1>'+
 				'<h6>If your keys don\'t work click somewhere on the game to bring focus to the iframe I put it in and try again.</h6>'+
 				' <h6>If your interested in seeing the code expand the iframe and then the document node to see '+
 				'the html and links to additional files.</h6>'+
