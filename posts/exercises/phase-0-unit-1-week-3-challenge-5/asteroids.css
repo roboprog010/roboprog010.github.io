@@ -6,7 +6,7 @@
 	margin: 0 auto;
 	overflow: hidden;
 }
-#ScoreCard {
+#ScoreCard, #Controls, #title {
 	position: relative;
 	background-color: #333;
 	height: 50px;
@@ -16,6 +16,12 @@
 	text-align: center;
 	font-size: 1.5em;
 }
+#title {
+	border-bottom: 2px solid #000;
+}
+#title h1 {
+	margin-top: 5px;
+}
 #Score { 
 	float: left; 
 	margin: 10px 0 0 30px;
@@ -24,17 +30,35 @@
 	float: right; 
 	margin: 10px 30px 0 0;
 }
+.control:hover {
+	text-decoration: underline;
+}
+.control {
+	float: left;
+	margin: 10px 0 0 30px;
+	cursor: pointer;
+	text-decoration: none;
+}
+#Pause {
+	float: left;
+	margin: 10px 0px 0 125px;
+}
 hr {
 	position: relative;
 	margin: 0;
 	left: -9999em;
 	clear: both;
+	width: 2px;
 }
 #SpaceShip {
 	background-color: #fff;
 	height: 20px;
 	width: 20px;
 	position: absolute;
+	/*border: 2px dashed #000; 33% shield*/
+	/*border: 2px dashed #999; 66% shield*/
+	/*border: 2px solid #999; 99% shield*/
+	
 }
 .WeaponBlast {
 	background-color: #fff;
@@ -47,4 +71,26 @@ hr {
 	height: 20px;
 	width: 20px;
 	position: absolute;
+}
+#MessageBoard {
+	height: 400px;
+	width: 400px;
+	position: absolute;
+	top: 50px;
+	left: 50px;
+	background-color: #fff;
+	z-index: 1;
+	text-align: center;
+}
+#MessageBoard h1 {
+	margin: 0;
+	padding: 20px;
+	font-size: 24px;
+}
+#start:hover {
+	text-decoration: underline;
+}
+#start {
+	cursor: pointer;
+	text-decoration: none;
 }

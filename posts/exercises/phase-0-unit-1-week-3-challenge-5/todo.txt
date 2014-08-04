@@ -1,8 +1,11 @@
-regeneration function
-level function
-beginning sequence
-ending sequence
+ending
+
+pseudocode
+refactor
+
 define weapon
 define shield
+define nuke
 weaponUpgrade function
 shieldUpgrade function
+nukeUpgrade function
