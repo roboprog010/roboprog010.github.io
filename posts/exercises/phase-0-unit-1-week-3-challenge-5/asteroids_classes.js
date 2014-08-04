@@ -23,10 +23,13 @@ function Map() {
 		list: {}
 	};
 	this.messageBoard = {
-		start: '<h1>This webpage has been <em>invaided</em> by asteroids! Be a true Web Dev Hero and <em>destroy</em> those '+
-				'asteroids with your PULSE CANON!</h1><h1>User your arrow keys to navigate and the space bar to FIRE!</h1>'+
+		start: '<h1>This webpage has been <em>invaded</em> by DIVs!! Be a true Web Dev Hero and <em>destroy</em> those '+
+				'DIVs with your SEMANTIC CANON!!</h1><h1>User your arrow keys to navigate and the space bar to FIRE!!</h1>'+
+				'<h6>If your keys don\'t work click somewhere on the game to bring focus to the iframe I put it in and try again.</h6>'+
+				' <h6>If your interested in seeing the code expand the iframe and then the document node to see '+
+				'the html and links to additional files.</h6>'+
 				'<h1 id="start">Start</h1>',
-		end: '<h1>Good Job!<br>Your Final Score is:<br><span id="final_score">0</span></h1><h1 id="close">Close</h1>'
+		end: '<h1>Good Job!</h1><h1>Your Final Score is: <span id="final_score">0</span></h1><h1 id="close">Close</h1>'
 	};
 }
 Map.prototype.increaseScore = function() {
@@ -75,10 +78,11 @@ Map.prototype.collisionTest = function() {
 		aYMin = this.asteroids.list[aId].position.y;
 		aYMax = this.asteroids.list[aId].position.y + ASTEROID_SIZE;
 		if (!(ssXMax < aXMin || aXMax < ssXMin || ssYMax < aYMin || aYMax < ssYMin)) {
-			this.level = 0;
-			this.score = 0;
-			this.initializeLevel();
-			collisionFound = true;
+			$('#Play').removeClass('active');
+			window.clearInterval(timingFunction); 
+			var finalScore = this.score;
+			this.restart();
+			$('#MessageBoard').html(this.messageBoard.end).find('#final_score').text(finalScore).end().css('left','50px');
 			break;
 		}
 	}
@@ -98,13 +102,9 @@ Map.prototype.collisionTest = function() {
 				this.currentAsteroidCount--;
 				this.repopulateAsteroids();
 				this.increaseScore();
-				collisionFound = true;
 				break collisionLoop;
 			}
 		}
-	}
-	if (collisionFound) {
-		$('#MessageBoard').html(this.messageBoard.end).css('left','50px');
 	}
 }
 Map.prototype.restart = function() {
@@ -114,7 +114,7 @@ Map.prototype.restart = function() {
 }
 
 function SpaceShip() {
-	this.acceleration = 1; //increase speed by 1px per second
+	this.acceleration = 0.25; //increase speed by 1px per second
 	this.fireRate = 1; //fire one shot per second
 	this.size = SPACE_SHIP_SIZE; //h: 20px, w: 20px
 	this.horizontalSpeed = 0; //pixels per second
@@ -174,7 +174,7 @@ function WeaponBlast(wbId, position, verticalSpeed) {
 	this.size = WEAPON_BLAST_SIZE;
 	if (verticalSpeed > 0) verticalSpeed = 0;
 	this.verticalSpeed = verticalSpeed - 2;
-	$('#Map').append('<div class="WeaponBlast" id="'+wbId+'"></div>');
+	$('#Map').append('<aside class="WeaponBlast" id="'+wbId+'"></aside>');
 	$('#'+wbId).css({left: this.position.x + 'px', top: this.position.y + 'px'});
 }
 WeaponBlast.prototype.move = function(map) {
