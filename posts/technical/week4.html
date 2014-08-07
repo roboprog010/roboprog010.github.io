@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type='text/css' rel='stylesheet' href='../../stylesheets/stylesheet.css' />
+		<title>How to Use Ruby's Map Method</title>
+	</head>
+	<body>
+		<nav id='table_of_contents'>
+			<a href='../../index.html'>Back to Table of Contents</a>
+		</nav>
+		<main>
+			<div class='post'>
+				<h2>How to Use Ruby's Map Method</h2>
+				<p>The map method is a non distructive enumerable method of Ruby's Array class or Enumerable#map in Rubyese. In a nutshell it will iterate over each element in an array and perform a function on each of these elements. It also has a corresponding destructive version Enumerable#map! if you need to change the original array and have it returned instead of returning a new one. It is a really handy method when you want to do 'something' to each element of an array. Take a look at the following examples to see what I mean.</p>
+				<figure class='code'>
+					<p>
+						<span>numbers = [1, 2, 3]</span>
+						<span>numbers.map { |num| num**2 }</span>
+						<span>Output: [1, 4, 9]</span>
+					</p>
+					<figcaption>
+						Here the map method is used to square each number in the array.
+					</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>names = ['liam', 'dustin', 'elisa']</span>
+						<span>names.map { |n| n.capitalize }</span>
+						<span>Output: ['Liam', 'Dustin', 'Elisa']</span>
+					</p>
+					<figcaption>
+						Here the map method is used to capitalize each name in the array.
+					</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>values = ['liam', 0.83, 'dustin', 31, 'elisa', 30]</span>
+						<span>values.map { |v| v.to_s }</span>
+						<span>Output: ['liam', '0.83', 'dustin', '31', 'elisa', '30']</span>
+					</p>
+					<figcaption>
+						Here the map method is used to convert each value in the array to a string.
+					</figcaption>
+				</figure>
+				<p>That's it! A very simple yet powerful method to use anytime you need to do 'something' to each value within an array.
+			</div>
+		</main>
+		<footer>
+			<p>&copy; 2014 Dustin Snyder All Rights Reserved.</p>
+		</footer>
+	</body>
+</html>
