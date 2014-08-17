@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type='text/css' rel='stylesheet' href='../../stylesheets/stylesheet.css' />
+		<title>Object Oriented Programming in Ruby by Example</title>
+	</head>
+	<body>
+		<nav id='table_of_contents'>
+			<a href='../../index.html'>Back to Table of Contents</a>
+		</nav>
+		<main>
+			<div class='post'>
+				<h1>Object Oriented Programming in Ruby by Example</h1>
+				<p>
+					There is lots of information out there about object oriented programming (OOP), but if your like me I find most of this information to be much too abstract. So, rather than make one more academic blog post about the four principles of OOP I will take you through a hands on example written in Ruby. 
+				</p>
+				<h2>Data Abstraction</h2>
+				<p>
+					The first principle of OOP we are going to cover is data abstraction. Data abstraction is just a fancy way of saying that we are going to model our data to look like it's real life equivalent. So, how do we model a ship? Well a ship should be an object that has a position and an acceleration constant. It should also be able to accelerate and move. Translating this into Ruby and we get something like this.
+				</p>
+				<figure class='code'>
+					<p>
+						<span>class Ship</span>
+							<span class='t1'>ACCELERATION = 1</span>
+							<span class='t1'>def initialize</span>
+								<span class='t2'>@position = { x: 0, y: 0 }</span>
+								<span class='t2'>@speed = { x: 0, y: 0 }</span>
+							<span class='t1'>end</span>
+							<span class='t1'>def acceleration(direction)</span>
+								<span class='t2'># ADDITIONAL CODE</span>
+							<span class='t1'>end</span>
+							<span class='t1'>def move</span>
+								<span class='t2'># ADDITIONAL CODE</span>
+							<span class='t1'>end</span>
+						<span>end</span>
+					</p>
+					<figcaption>A basic Ruby class that represents a space ship.</figcaption>
+				</figure>
+				<p>
+					This is what is called a class. A class is just a blueprint that is use to create objects that represent some structured data which in this case is a ship. Without getting into too much detail <code>ACCELERATION</code> is a constant that is global in scope and can be accessed using <code>Ship::ACCELERATION</code> outside the class or just <code>ACCELERATION</code> within the class. <code>@position</code> and <code>@speed</code> are instance variables which have local scope and therefore can only be accessed from within the class and don't actually exist until an object is created. <code>initialize</code> is a constructor method which creates an object when called with <code>Ship.new</code>. Finally, <code>acceleration</code> and <code>move</code> are instance methods that are global in scope and can therefore be accessed from outside a class as well as within a class. From outside the class they are accessed using <code>objectInstanceName.methodName</code> and from within the class using <code>methodName</code> for example <code>ship.move</code> and <code>move</code>.
+				</p>
+				<h2>Encapsulation</h2>
+				<p>
+					Encapsulation just means that all of the implementation details of the object being modeled are hidden and only the methods and properties required to use the object are exposed. For our <code>Ship</code> class <code>@position</code> and <code>@speed</code> are hidden as they do not need to be known outside the class since they are just used by the methods <code>acceleration</code> and <code>move</code>. The methods <code>acceleration</code> and <code>move</code> on the other hand are public since the main body of the script will need to call these methods to cause the ship to accelerate or move. Finally, the <code>ACCELERATION</code> constant is public, but it cannot be changed. This is encapsulation at work. The ship has a clearly defined interface for it's use namely the <code>acceleration</code> and <code>move</code> methods and the rest of it's implementation is either hidden from view or cannot be altered. This is important because it allows for us to alter the class definition for example the <code>move</code> or <code>acceleration</code> methods, but it will not affect any other part of the program which uses <code>Ship</code> since the interface remains the same. Call <code>accelerate</code> to accelerate and <code>move</code> to move.
+				</p>
+				<h2>Inheritance</h2>
+				<p>
+					Inheritance is a real time saver as it will allow us to create classes, or new object blueprints, which will inherit constants, properties, and methods from it's parent class. This allows for us to create a class hierarchy or taxonomy if you will. In our example we will add a new class which will represent a special kind of space ship; a fighter. Fighters are just like any other spaceship except they can also fire missiles! So, instead of having to add all of the same kinds of constants, properties, and methods we will just make Fighter a subclass of Ship. Once this is done the only thing for us to do is add a method to fire missiles.
+				</p>
+				<figure class='code'>
+					<p>
+						<span>class Fighter &lt; Ship</span>
+							<span class='t1'>def fire_missle</span>
+								<span class='t2'># ADDITIONAL CODE</span>
+							<span class='t1'>end</span>
+						<span>end</span>
+					</p>
+					<figcaption>An example of class inheritance where Fighter inherits all of the constants, properties, and methods of Ship and then adds a new method fire_missles.</figcaption>
+				</figure>
+				<p>
+					Pretty cool right? You should note, however, that a class can only inherit from one other class. Classes can be chained together though creating an inheritance tree. For example Stealth_Fighter &lt; Fighter &lt; Ship. Modules are used in Ruby to simulate the multiple inheritance of other OOP languages, but we are not going to cover these here.
+				</p>
+				<h2>Polymorphism</h2>
+				<p>
+					Where do they come up with these names? Latin of course! Polymorphism means <em>many forms</em> which aptly describes the ability of OOP languages to use the same identifier to cause different behavior. So far in our program <code>Fighter</code> has inherited all of it's implementation details from it's parent class <code>Ship</code> except for the <code>fire_missle</code> method, but this doesn't seem quite right. Fighters should have a greater acceleration and the ability to keep track of how many missiles they currently have. So lets make these changes using polymorphism.
+				</p>
+				<figure class='code'>
+				<p>
+					<span>class Fighter &lt; Ship</span>
+						<span class='t1'>ACCELERATION = 2</span>
+						<span class='t1'>def initialize</span>
+							<span class='t2'>super()</span>
+							<span class='t2'>@missiles = 10</span>
+						<span class='t1'>end</span>
+					<span>end</span>
+				</p>
+				<figcaption>An example of polymorphism through the redeclaration of ACCELERATION and the modification of initialize.</figcaption>
+			</figure>
+			<p>
+				Using polymorphism we can alter or completely replace inherited features, but we don't have to change their identifiers, or names, or the interface that is used to use or access them! In this example we have replaced the original acceleration constant with one that is twice as much. We have also extended the original <code>initialize</code> method to include a new instance variable <code>@missles</code> which will keep track of how many missiles our fighter has at any given time. The <code>super()</code> method calls the wrapping method, <code>initialize</code> in this case, of the parent class. This is needed for inheritance to be maintained because when a method is redefined in a child class it completely replaces the inherited method. A single call to <code>super()</code> fixes this issue. With polymorphism it doesn't matter if we are using a ship or a fighter or that they are implemented differently we just tell them to move or accelerate and their classes take care of all of the details and that is the power of polymorphism and OOP.
+			</p>
+			<h2>Conclusion</h2>
+			<p>
+				That's it. Well not really. OOP is a large field with many nuances for you to explore, but hopefully this little tutorial has helped you better understand OOP and Ruby. <!--If you would like to see a working copy of this little program click the following link to <a href='#'>ships.rb</a> on my GitHub page.--> Take it easy and happy coding.
+			</p>
+			</div>
+		</main>
+		<footer>
+			<p>&copy; 2014 Dustin Snyder All Rights Reserved.</p>
+		</footer>
+	</body>
+</html>
+
+<!--
+<h2></h2>
+<p></p>
+<figure class='code'>
+	<p>
+		<span></span>
+	</p>
+	<figcaption></figcaption>
+</figure>
+-->
