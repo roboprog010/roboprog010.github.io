@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<link type='text/css' rel='stylesheet' href='../../stylesheets/stylesheet.css' />
-		<title>Object Oriented Programming in Ruby by Example</title>
+		<title>All About Blocs, Procs, and Lambdas in Ruby</title>
 	</head>
 	<body>
 		<nav id='table_of_contents'>
@@ -10,79 +10,146 @@
 		</nav>
 		<main>
 			<div class='post'>
-				<h1>Object Oriented Programming in Ruby by Example</h1>
+				<h1>All About Blocs, Procs, and Lambdas in Ruby</h1>
 				<p>
-					There is lots of information out there about object oriented programming (OOP), but if your like me I find most of this information to be much too abstract. So, rather than make one more academic blog post about the four principles of OOP I will take you through a hands on example written in Ruby. 
+					So, what are blocs, procs, and lambdas and why should you care about them? To put it simply, they one of the coolest aspects of the Ruby language and they are the sole reason why we have the Enumerable class and it's really nifty methods like map which takes a list and a method and returns a new list where each item has been ran through the supplied method. Very cool. But, were getting ahead of ourselves. Before we can understand how cool methods like map work we fist need to define what a bloc is.
 				</p>
-				<h2>Data Abstraction</h2>
+				<h2>Blocs</h2>
 				<p>
-					The first principle of OOP we are going to cover is data abstraction. Data abstraction is just a fancy way of saying that we are going to model our data to look like it's real life equivalent. So, how do we model a ship? Well a ship should be an object that has a position and an acceleration constant. It should also be able to accelerate and move. Translating this into Ruby and we get something like this.
-				</p>
-				<figure class='code'>
-					<p>
-						<span>class Ship</span>
-							<span class='t1'>ACCELERATION = 1</span>
-							<span class='t1'>def initialize</span>
-								<span class='t2'>@position = { x: 0, y: 0 }</span>
-								<span class='t2'>@speed = { x: 0, y: 0 }</span>
-							<span class='t1'>end</span>
-							<span class='t1'>def acceleration(direction)</span>
-								<span class='t2'># ADDITIONAL CODE</span>
-							<span class='t1'>end</span>
-							<span class='t1'>def move</span>
-								<span class='t2'># ADDITIONAL CODE</span>
-							<span class='t1'>end</span>
-						<span>end</span>
-					</p>
-					<figcaption>A basic Ruby class that represents a space ship.</figcaption>
-				</figure>
-				<p>
-					This is what is called a class. A class is just a blueprint that is use to create objects that represent some structured data which in this case is a ship. Without getting into too much detail <code>ACCELERATION</code> is a constant that is global in scope and can be accessed using <code>Ship::ACCELERATION</code> outside the class or just <code>ACCELERATION</code> within the class. <code>@position</code> and <code>@speed</code> are instance variables which have local scope and therefore can only be accessed from within the class and don't actually exist until an object is created. <code>initialize</code> is a constructor method which creates an object when called with <code>Ship.new</code>. Finally, <code>acceleration</code> and <code>move</code> are instance methods that are global in scope and can therefore be accessed from outside a class as well as within a class. From outside the class they are accessed using <code>objectInstanceName.methodName</code> and from within the class using <code>methodName</code> for example <code>ship.move</code> and <code>move</code>.
-				</p>
-				<h2>Encapsulation</h2>
-				<p>
-					Encapsulation just means that all of the implementation details of the object being modeled are hidden and only the methods and properties required to use the object are exposed. For our <code>Ship</code> class <code>@position</code> and <code>@speed</code> are hidden as they do not need to be known outside the class since they are just used by the methods <code>acceleration</code> and <code>move</code>. The methods <code>acceleration</code> and <code>move</code> on the other hand are public since the main body of the script will need to call these methods to cause the ship to accelerate or move. Finally, the <code>ACCELERATION</code> constant is public, but it cannot be changed. This is encapsulation at work. The ship has a clearly defined interface for it's use namely the <code>acceleration</code> and <code>move</code> methods and the rest of it's implementation is either hidden from view or cannot be altered. This is important because it allows for us to alter the class definition for example the <code>move</code> or <code>acceleration</code> methods, but it will not affect any other part of the program which uses <code>Ship</code> since the interface remains the same. Call <code>accelerate</code> to accelerate and <code>move</code> to move.
-				</p>
-				<h2>Inheritance</h2>
-				<p>
-					Inheritance is a real time saver as it will allow us to create classes, or new object blueprints, which will inherit constants, properties, and methods from it's parent class. This allows for us to create a class hierarchy or taxonomy if you will. In our example we will add a new class which will represent a special kind of space ship; a fighter. Fighters are just like any other spaceship except they can also fire missiles! So, instead of having to add all of the same kinds of constants, properties, and methods we will just make Fighter a subclass of Ship. Once this is done the only thing for us to do is add a method to fire missiles.
+					A bloc in Ruby is any code enclosed by <code>{}</code> or the keywords <code>do end</code>. All blocs in Ruby are actually closures also called lambdas or procedures. A closure is a stored function with it's own internal variable scope and storage. So, they are like little programs within programs that can be passed into functions or returned by functions.  So the title of this post is 'All About Blocs, Procs, and Lambdas in Ruby', but it could actually be shortened to just 'All About Blocs in Ruby'. The other keywords were added to the title because these terms are often used interchangeably and because despite there almost identical functionality there are slight differences between these three constructs in Ruby which will be discussed later. Let's look at a simple example.
 				</p>
 				<figure class='code'>
 					<p>
-						<span>class Fighter &lt; Ship</span>
-							<span class='t1'>def fire_missle</span>
-								<span class='t2'># ADDITIONAL CODE</span>
-							<span class='t1'>end</span>
+						<span>def mantra</span>
+							<span class='t1'>yield 5</span>
 						<span>end</span>
+						<span>mantra { |n|</span>
+							<span class='t1'>puts 'Take it easy.' * n</span>
+						<span>}</span>
 					</p>
-					<figcaption>An example of class inheritance where Fighter inherits all of the constants, properties, and methods of Ship and then adds a new method fire_missles.</figcaption>
+					<figcaption>An example of sending a bloc to a method.</figcaption>
 				</figure>
 				<p>
-					Pretty cool right? You should note, however, that a class can only inherit from one other class. Classes can be chained together though creating an inheritance tree. For example Stealth_Fighter &lt; Fighter &lt; Ship. Modules are used in Ruby to simulate the multiple inheritance of other OOP languages, but we are not going to cover these here.
-				</p>
-				<h2>Polymorphism</h2>
-				<p>
-					Where do they come up with these names? Latin of course! Polymorphism means <em>many forms</em> which aptly describes the ability of OOP languages to use the same identifier to cause different behavior. So far in our program <code>Fighter</code> has inherited all of it's implementation details from it's parent class <code>Ship</code> except for the <code>fire_missle</code> method, but this doesn't seem quite right. Fighters should have a greater acceleration and the ability to keep track of how many missiles they currently have. So lets make these changes using polymorphism.
+					Basically, what we are doing here is sending an anonymous bloc, the stuff between the curly braces, to the function <code>mantra</code> which then runs that code by using the keyword <code>yield</code>. The anonymous bloc requires a single parameter which is supplied by the <code>yield</code> method's argument of 5. Now this is a trivial example, but it forms the basis for something like this.
 				</p>
 				<figure class='code'>
+					<p>
+						<span>def mapping list</span>
+							<span class='t1'>new_array = []</span>
+							<span class='t1'>for element in list</span>
+								<span class='t2'>new_array &lt;&lt; (yield element)</span>
+							<span class='t1'>end</span>
+							<span class='t1'>new_array</span>
+						<span>end</span>
+						<span>array = [1, 2, 3, 4, 5]</span>
+						<span>array_2 = mapping array do |element|</span>
+							<span class='t1'>element * 2</span>
+						<span>end</span>
+						<span>puts "#{array} =&gt; #{array_2}" # =&gt; [1,2,3,4,5] =&gt; [2,4,6,8,10]</span>
+					</p>
+					<figcaption>An example of how a bloc can be used to create a mapping function.</figcaption>
+				</figure>
 				<p>
-					<span>class Fighter &lt; Ship</span>
-						<span class='t1'>ACCELERATION = 2</span>
-						<span class='t1'>def initialize</span>
-							<span class='t2'>super()</span>
-							<span class='t2'>@missiles = 10</span>
-						<span class='t1'>end</span>
-					<span>end</span>
+					We just created our own mapping function! Blocs can be really handy in getting rid of a lot of repetitive coding. For example, if you need to do testing where a piece of code is ran and then it's output or errors are formatted and printed you can simply wrap that code into a bloc and then send it to a testing function. If you want to send a query to a database and do error checking just wrap your query function within a bloc and send it to a database connecting function. The possibilities are endless. Now that we have covered bloc functionality lets go over a few notes about bloc syntax and a few gotchas.
 				</p>
-				<figcaption>An example of polymorphism through the redeclaration of ACCELERATION and the modification of initialize.</figcaption>
-			</figure>
-			<p>
-				Using polymorphism we can alter or completely replace inherited features, but we don't have to change their identifiers, or names, or the interface that is used to use or access them! In this example we have replaced the original acceleration constant with one that is twice as much. We have also extended the original <code>initialize</code> method to include a new instance variable <code>@missles</code> which will keep track of how many missiles our fighter has at any given time. The <code>super()</code> method calls the wrapping method, <code>initialize</code> in this case, of the parent class. This is needed for inheritance to be maintained because when a method is redefined in a child class it completely replaces the inherited method. A single call to <code>super()</code> fixes this issue. With polymorphism it doesn't matter if we are using a ship or a fighter or that they are implemented differently we just tell them to move or accelerate and their classes take care of all of the details and that is the power of polymorphism and OOP.
-			</p>
-			<h2>Conclusion</h2>
-			<p>
-				That's it. Well not really. OOP is a large field with many nuances for you to explore, but hopefully this little tutorial has helped you better understand OOP and Ruby. <!--If you would like to see a working copy of this little program click the following link to <a href='#'>ships.rb</a> on my GitHub page.--> Take it easy and happy coding.
-			</p>
+				<h2>Bloc Syntax</h2>
+				<p>
+					If you want to send arguments along with an anonymous bloc you can do this two different ways. If you use bracket notation to define a bloc the arguments must be put inside parenthesis. If you use <code>do end</code> notation no parenthesis are required.
+				</p>
+				<figure class='code'>
+					<p>
+						<span>def mantra (chant_1,chant_2)</span>
+						    <span class='t1'>puts chant_1</span>
+						    <span class='t1'>puts chant_2</span>
+						    <span class='t1'>yield 5</span>
+						<span>end</span>
+						<span>mantra('ohm','ohm') { |n|</span>
+						    <span class='t1'>puts 'take it easy.' * n</span>
+						<span>}</span>
+						<span># or</span>
+						<span>mantra 'ohm', 'ohm' do |n|</span>
+							<span class='t1'>puts 'take it easy.' * n</span>
+						<span>end</span>
+					</p>
+					<figcaption>An example of sending arguments along with an anonymous bloc to a function.</figcaption>
+				</figure>
+				<p>
+					A bloc can also be sent to a function and stored in a parameter by using an <code>&amp;</code> before the last parameter name within the function header. Please note that this creates a procedure object which is then stored within that variable name and therefore you will have to use <code>.call</code> instead of <code>yield</code>.
+				</p>
+				<figure class='code'>
+					<p>
+						<span>def mantra (chant_1,chant_2,&amp;c3)</span>
+						    <span class='t1'>puts chant_1</span>
+						    <span class='t1'>puts chant_2</span>
+						    <span class='t1'>c3.call 5</span>
+						<span>end</span>
+						<span>mantra('ohm','ohm') { |n|</span>
+						    <span class='t1'>puts 'take it easy.' * n</span>
+						<span>}</span>
+					</p>
+					<figcaption>An example of sending an anonymous bloc to a function which is then converted into a procedure and stored in a variable &amp;c3.</figcaption>
+				</figure>
+				<p>
+					So far we have only been creating procedures by sending anonymous blocs into functions and then using the <code>&amp;</code> syntax to convert these blocs into procedures. To create a procedure object and store a bloc of code inside it use the <code>lambda</code>, <code>proc</code>, or <code>Proc.new</code> keywords.
+				</p>
+				<figure class='code'>
+					<p>
+						<span>def mantra chant_1, chant_2, c3</span>
+							<span class='t1'>puts chant_1</span>
+							<span class='t1'>puts chant_2</span>
+							<span class='t1'>c3.call 5</span>
+						<span>end</span>
+						<span>mantra_procedure = proc { |n|</span>
+							<span class='t1'>puts 'take it easy.' * n</span>
+						<span>}</span>
+						<span># proc could be replaced by lambda or Proc.new</span>
+						<span>mantra 'ohm', 'ohm', mantra_procedure</span>
+					</p>
+					<figcaption>An example of creating a procedure object called mantra_procedure and storing a bloc of code within it.</figcaption>
+				</figure>
+				<p>
+					Finally, <code>bloc_given?</code> can be used within methods or functions to check and see if a bloc was submitted or not. This can be usefully when you want a method to have a default behavior which can subsequently be overwritten by a submitted bloc. This behavior is commonly seen with the sort method which will sort an array or object in ascending order, but it's behavior can be changed by submitting an anonymous bloc.
+				</p>
+				<h2>Bloc Gotchas</h2>
+				<p>
+					Always remember that variables defined in the main script are actually properties of an object from the Object class which all other classes are subclasses of. This means that every bloc can access and change any variable defined within the main script! If you use the variables passed into a bloc you are fine as these are locally defined, however, if you create any variables within a bloc and they just happen to be the same name as a variable in your main script you could accidentally change their values. If you are going to use variables that are not passed into a bloc define them within the bloc header using bloc local variable syntax which will make these declared variables local.
+				</p>
+				<figure class='code'>
+					<p>
+						<span>def mantra</span>
+						    <span class='t1'>yield 5</span>
+						<span>end</span>
+						<span>mantra { |n; new_n|</span>
+						    <span class='t1'>new_n = n - n % 2 # we only chant in even increments</span>
+						    <span class='t1'>puts 'Take it easy.' * n</span>
+						<span>}</span>
+					</p>
+					<figcaption>An example of using bloc local variable syntax to create a locally defined variable within a bloc.</figcaption>
+				</figure>
+				<p>
+					Basically, any variables listed after the semicolon and between the bars becomes a local variable within the bloc protecting any variable defined in the main body of the program which may have the same name.
+				</p>
+				<p>
+					You know how I said blocs, procs, and lambdas are all the same, well, not exactly. Blocs, procs, and lambdas are all closures, however, procs and lambdas are specifically instances of the Proc class and therefore not the same as blocs. Many methods, most notably enumerable methods, only take anonymous blocs. If you have a stored procedure that you would like to send to one of these methods use <code>&amp;</code> before the argument's name when sending it to the method. This basically does the opposite of an <code>&amp;</code> within a method header, it converts a procedure to a bloc.
+				</p>
+				<figure class='code'>
+					<p>
+						<span># as an anonymous bloc</span>
+						<span>puts [1,2,3,4,5].map { |n|</span>
+							<span class='t1'>n * 2</span>
+						<span>}.to_s</span>
+						<span># as a procedure</span>
+						<span>p = proc { |n|</span>
+							<span class='t1'>n * 2</span>
+						<span>}</span>
+						<span>puts ([1,2,3,4,5].map &amp;p).to_s</span>
+					</p>
+					<figcaption>An example of converting a stored procedure into a bloc before sending it to an enumerable method.</figcaption>
+				</figure>
+				<h2>Conclusion</h2>
+				<p>
+					So, to sum up blocs, procs, and lambdas in Ruby just remember that they are basically methods with their own variable scope and variable storage that can be passed into functions or be created by functions. This capability is what makes the Enumerable class possible and so much more. It is powerful stuff worth learning so play around with them in irb be creative and have fun!
+				</p>
 			</div>
 		</main>
 		<footer>
@@ -90,14 +157,3 @@
 		</footer>
 	</body>
 </html>
-
-<!--
-<h2></h2>
-<p></p>
-<figure class='code'>
-	<p>
-		<span></span>
-	</p>
-	<figcaption></figcaption>
-</figure>
--->
