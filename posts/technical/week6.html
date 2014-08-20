@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<link type='text/css' rel='stylesheet' href='../../stylesheets/stylesheet.css' />
-		<title>All About Blocs, Procs, and Lambdas in Ruby</title>
+		<title>All About Blocks, Procs, and Lambdas in Ruby</title>
 	</head>
 	<body>
 		<nav id='table_of_contents'>
@@ -10,13 +10,13 @@
 		</nav>
 		<main>
 			<div class='post'>
-				<h1>All About Blocs, Procs, and Lambdas in Ruby</h1>
+				<h1>All About Blocks, Procs, and Lambdas in Ruby</h1>
 				<p>
-					So, what are blocs, procs, and lambdas and why should you care about them? To put it simply, they one of the coolest aspects of the Ruby language and they are the sole reason why we have the Enumerable class and it's really nifty methods like map which takes a list and a method and returns a new list where each item has been ran through the supplied method. Very cool. But, were getting ahead of ourselves. Before we can understand how cool methods like map work we fist need to define what a bloc is.
+					So, what are blocks, procs, and lambdas and why should you care about them? To put it simply, they one of the coolest aspects of the Ruby language and they are the sole reason why we have the Enumerable class and it's really nifty methods like map which takes a list and a method and returns a new list where each item has been ran through the supplied method. Very cool. But, were getting ahead of ourselves. Before we can understand how cool methods like map work we fist need to define what a block is.
 				</p>
-				<h2>Blocs</h2>
+				<h2>Blocks</h2>
 				<p>
-					A bloc in Ruby is any code enclosed by <code>{}</code> or the keywords <code>do end</code>. All blocs in Ruby are actually closures also called lambdas or procedures. A closure is a stored function with it's own internal variable scope and storage. So, they are like little programs within programs that can be passed into functions or returned by functions.  So the title of this post is 'All About Blocs, Procs, and Lambdas in Ruby', but it could actually be shortened to just 'All About Blocs in Ruby'. The other keywords were added to the title because these terms are often used interchangeably and because despite there almost identical functionality there are slight differences between these three constructs in Ruby which will be discussed later. Let's look at a simple example.
+					A block in Ruby is any code enclosed by <code>{}</code> or the keywords <code>do end</code>. All blocks in Ruby are actually closures also called lambdas or procedures. A closure is a stored function with it's own internal variable scope and storage. So, they are like little programs within programs that can be passed into functions or returned by functions.  So the title of this post is 'All About Blocks, Procs, and Lambdas in Ruby', but it could actually be shortened to just 'All About Blocks in Ruby'. The other keywords were added to the title because these terms are often used interchangeably and because despite there almost identical functionality there are slight differences between these three constructs in Ruby which will be discussed later. Let's look at a simple example.
 				</p>
 				<figure class='code'>
 					<p>
@@ -27,10 +27,10 @@
 							<span class='t1'>puts 'Take it easy.' * n</span>
 						<span>}</span>
 					</p>
-					<figcaption>An example of sending a bloc to a method.</figcaption>
+					<figcaption>An example of sending a block to a method.</figcaption>
 				</figure>
 				<p>
-					Basically, what we are doing here is sending an anonymous bloc, the stuff between the curly braces, to the function <code>mantra</code> which then runs that code by using the keyword <code>yield</code>. The anonymous bloc requires a single parameter which is supplied by the <code>yield</code> method's argument of 5. Now this is a trivial example, but it forms the basis for something like this.
+					Basically, what we are doing here is sending an anonymous block, the stuff between the curly braces, to the function <code>mantra</code> which then runs that code by using the keyword <code>yield</code>. The anonymous block requires a single parameter which is supplied by the <code>yield</code> method's argument of 5. Now this is a trivial example, but it forms the basis for something like this.
 				</p>
 				<figure class='code'>
 					<p>
@@ -47,14 +47,14 @@
 						<span>end</span>
 						<span>puts "#{array} =&gt; #{array_2}" # =&gt; [1,2,3,4,5] =&gt; [2,4,6,8,10]</span>
 					</p>
-					<figcaption>An example of how a bloc can be used to create a mapping function.</figcaption>
+					<figcaption>An example of how a block can be used to create a mapping function.</figcaption>
 				</figure>
 				<p>
-					We just created our own mapping function! Blocs can be really handy in getting rid of a lot of repetitive coding. For example, if you need to do testing where a piece of code is ran and then it's output or errors are formatted and printed you can simply wrap that code into a bloc and then send it to a testing function. If you want to send a query to a database and do error checking just wrap your query function within a bloc and send it to a database connecting function. The possibilities are endless. Now that we have covered bloc functionality lets go over a few notes about bloc syntax and a few gotchas.
+					We just created our own mapping function! Blocks can be really handy in getting rid of a lot of repetitive coding. For example, if you need to do testing where a piece of code is ran and then it's output or errors are formatted and printed you can simply wrap that code into a block and then send it to a testing function. If you want to send a query to a database and do error checking just wrap your query function within a block and send it to a database connecting function. The possibilities are endless. Now that we have covered block functionality lets go over a few notes about block syntax and a few gotchas.
 				</p>
-				<h2>Bloc Syntax</h2>
+				<h2>Block Syntax</h2>
 				<p>
-					If you want to send arguments along with an anonymous bloc you can do this two different ways. If you use bracket notation to define a bloc the arguments must be put inside parenthesis. If you use <code>do end</code> notation no parenthesis are required.
+					If you want to send arguments along with an anonymous block you can do this two different ways. If you use bracket notation to define a block the arguments must be put inside parenthesis. If you use <code>do end</code> notation no parenthesis are required.
 				</p>
 				<figure class='code'>
 					<p>
@@ -71,10 +71,10 @@
 							<span class='t1'>puts 'take it easy.' * n</span>
 						<span>end</span>
 					</p>
-					<figcaption>An example of sending arguments along with an anonymous bloc to a function.</figcaption>
+					<figcaption>An example of sending arguments along with an anonymous block to a function.</figcaption>
 				</figure>
 				<p>
-					A bloc can also be sent to a function and stored in a parameter by using an <code>&amp;</code> before the last parameter name within the function header. Please note that this creates a procedure object which is then stored within that variable name and therefore you will have to use <code>.call</code> instead of <code>yield</code>.
+					A block can also be sent to a function and stored in a parameter by using an <code>&amp;</code> before the last parameter name within the function header. Please note that this creates a procedure object which is then stored within that variable name and therefore you will have to use <code>.call</code> instead of <code>yield</code>.
 				</p>
 				<figure class='code'>
 					<p>
@@ -87,10 +87,10 @@
 						    <span class='t1'>puts 'take it easy.' * n</span>
 						<span>}</span>
 					</p>
-					<figcaption>An example of sending an anonymous bloc to a function which is then converted into a procedure and stored in a variable &amp;c3.</figcaption>
+					<figcaption>An example of sending an anonymous block to a function which is then converted into a procedure and stored in a variable c3.</figcaption>
 				</figure>
 				<p>
-					So far we have only been creating procedures by sending anonymous blocs into functions and then using the <code>&amp;</code> syntax to convert these blocs into procedures. To create a procedure object and store a bloc of code inside it use the <code>lambda</code>, <code>proc</code>, or <code>Proc.new</code> keywords.
+					So far we have only been creating procedures by sending anonymous blocks into functions and then using the <code>&amp;</code> syntax to convert these blocks into procedures. To create a procedure object and store a block of code inside it use the <code>lambda</code>, <code>proc</code>, or <code>Proc.new</code> keywords.
 				</p>
 				<figure class='code'>
 					<p>
@@ -105,14 +105,14 @@
 						<span># proc could be replaced by lambda or Proc.new</span>
 						<span>mantra 'ohm', 'ohm', mantra_procedure</span>
 					</p>
-					<figcaption>An example of creating a procedure object called mantra_procedure and storing a bloc of code within it.</figcaption>
+					<figcaption>An example of creating a procedure object called mantra_procedure and storing a block of code within it.</figcaption>
 				</figure>
 				<p>
-					Finally, <code>bloc_given?</code> can be used within methods or functions to check and see if a bloc was submitted or not. This can be usefully when you want a method to have a default behavior which can subsequently be overwritten by a submitted bloc. This behavior is commonly seen with the sort method which will sort an array or object in ascending order, but it's behavior can be changed by submitting an anonymous bloc.
+					Finally, <code>bloc_given?</code> can be used within methods or functions to check and see if a block was submitted or not. This can be usefully when you want a method to have a default behavior which can subsequently be overwritten by a submitted block. This behavior is commonly seen with the sort method which will sort an array or object in ascending order, but it's behavior can be changed by submitting an anonymous block.
 				</p>
-				<h2>Bloc Gotchas</h2>
+				<h2>Block Gotchas</h2>
 				<p>
-					Always remember that variables defined in the main script are actually properties of an object from the Object class which all other classes are subclasses of. This means that every bloc can access and change any variable defined within the main script! If you use the variables passed into a bloc you are fine as these are locally defined, however, if you create any variables within a bloc and they just happen to be the same name as a variable in your main script you could accidentally change their values. If you are going to use variables that are not passed into a bloc define them within the bloc header using bloc local variable syntax which will make these declared variables local.
+					Always remember that variables defined in the main script are actually properties of an object from the Object class which all other classes are subclasses of. This means that every block can access and change any variable defined within the main script! If you use the variables passed into a block you are fine as these are locally defined, however, if you create any variables within a block and they just happen to be the same name as a variable in your main script you could accidentally change their values. If you are going to use variables that are not passed into a block define them within the block header using block local variable syntax which will make these declared variables local.
 				</p>
 				<figure class='code'>
 					<p>
@@ -124,17 +124,17 @@
 						    <span class='t1'>puts 'Take it easy.' * n</span>
 						<span>}</span>
 					</p>
-					<figcaption>An example of using bloc local variable syntax to create a locally defined variable within a bloc.</figcaption>
+					<figcaption>An example of using block local variable syntax to create a locally defined variable within a block.</figcaption>
 				</figure>
 				<p>
-					Basically, any variables listed after the semicolon and between the bars becomes a local variable within the bloc protecting any variable defined in the main body of the program which may have the same name.
+					Basically, any variables listed after the semicolon and between the bars becomes a local variable within the block protecting any variable defined in the main body of the program which may have the same name.
 				</p>
 				<p>
-					You know how I said blocs, procs, and lambdas are all the same, well, not exactly. Blocs, procs, and lambdas are all closures, however, procs and lambdas are specifically instances of the Proc class and therefore not the same as blocs. Many methods, most notably enumerable methods, only take anonymous blocs. If you have a stored procedure that you would like to send to one of these methods use <code>&amp;</code> before the argument's name when sending it to the method. This basically does the opposite of an <code>&amp;</code> within a method header, it converts a procedure to a bloc.
+					You know how I said blocks, procs, and lambdas are all the same, well, not exactly. Blocks, procs, and lambdas are all closures, however, procs and lambdas are specifically instances of the Proc class and therefore not the same as blocks. Many methods, most notably enumerable methods, only take anonymous blocks. If you have a stored procedure that you would like to send to one of these methods use <code>&amp;</code> before the argument's name when sending it to the method. This basically does the opposite of an <code>&amp;</code> within a method header, it converts a procedure to a block.
 				</p>
 				<figure class='code'>
 					<p>
-						<span># as an anonymous bloc</span>
+						<span># as an anonymous block</span>
 						<span>puts [1,2,3,4,5].map { |n|</span>
 							<span class='t1'>n * 2</span>
 						<span>}.to_s</span>
@@ -144,11 +144,11 @@
 						<span>}</span>
 						<span>puts ([1,2,3,4,5].map &amp;p).to_s</span>
 					</p>
-					<figcaption>An example of converting a stored procedure into a bloc before sending it to an enumerable method.</figcaption>
+					<figcaption>An example of converting a stored procedure into a block before sending it to an enumerable method.</figcaption>
 				</figure>
 				<h2>Conclusion</h2>
 				<p>
-					So, to sum up blocs, procs, and lambdas in Ruby just remember that they are basically methods with their own variable scope and variable storage that can be passed into functions or be created by functions. This capability is what makes the Enumerable class possible and so much more. It is powerful stuff worth learning so play around with them in irb be creative and have fun!
+					So, to sum up blocks, procs, and lambdas in Ruby just remember that they are basically methods with their own variable scope and variable storage that can be passed into functions or be created by functions. This capability is what makes the Enumerable class possible and so much more. It is powerful stuff worth learning so play around with them in irb be creative and have fun!
 				</p>
 			</div>
 		</main>
