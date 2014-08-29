@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type='text/css' rel='stylesheet' href='../../stylesheets/stylesheet.css' />
+		<title>What's the Big Deal with SQL Injection?</title>
+	</head>
+	<body>
+		<nav id='table_of_contents'>
+			<a href='../../index.html'>Back to Table of Contents</a>
+		</nav>
+		<main>
+			<div class='post'>
+				
+				<h1>What's the Big Deal with SQL Injection?</h1>
+				<p>SQL injection, or SQLi, has received a lot of attention because it has been identified as one of the most common methods of attack on website infrastructure in both frequency and extent of damage. However, all is not lost. The threat posed by SQLi can be significantly reduced by using just a few easy to implement coding standards when building web applications.</p>
+				
+				<h2>What is SQLi?</h2>
+				<p>In it's most basic form SQLi is where a user enters SQL code into a web form to change the behavior of a web application usually in an effort to retrieve or destroy data. This means that SQLi is only possible if a site creates dynamic SQL statements from user supplied input to be executed by a server side database management system (DBMS). Any database driven website will most likely do this to log in users or retrieve information so this is a very common problem indeed. There are many forms of SQLi from obvious to extremely obscure, but they are all related to the fact that by default SQL interpreters parse whatever query string is sent to them. A simple example will make this vulnerability much easier to grasp.</p>
+				<p>Let's say that a website is running the PHP language on it's server and that it logs in users by checking a submitted form's user name and password fields against a database table called users. If that user name and password combination exists within the database the the program will then create a session and a session variable to identify that user based on the database query results.</p>
+				<figure class='code'>
+					<p>
+						<span>&lt;form action='php/user_login.php' method='post'&gt;</form>
+							<span class='t1'>&lt;label for='un'&gt;User Name:&lt;/label&gt;&lt;input type='text' id='un' name='un'&gt;</span>
+							<span class='t1'>&lt;label for='pw'&gt;Password:&lt;/label&gt;&lt;input type='password' id='pw' name='pw'&gt;</span>
+							<span class='t1'>&lt;input type='submit'&gt;</span>
+						<span>&lt;/form&gt;</span>
+					</p>
+					<figcaption>A basic HTML form that allows an anonymous user to login.</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>$user_name = $_POST['un'];</span>
+						<span>$password = $_POST['pw'];</span>
+						<span>$query = 'SELECT user_id FROM users WHERE user_name = "' .</span>
+						<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$user_name . '" AND password = "' . $password . '"';</span>
+					</p>
+					<figcaption>A basic PHP script that receives a user name and password from a website and uses these strings to construct a query.</figcaption>
+				</figure>
+				<p>Now, it is expected that the user will enter a user name and password like 'Dustin' and 'Sakura' which would create the following query.</p>
+				<p><code>SELECT user_id FROM users WHERE user_name = "Dustin" AND password = "Sakura"</code></p>
+				<p>If this user exists and the password is correct they will be 'logged in' other wise they will be given an error message. However, what if a 'black hat' hacker used <code>" or 1=1 LIMIT 0,1 --</code> for the user name and <code>password</code> for the password. This would create the following query.</p>
+				<p><code>SELECT user_id FROM users WHERE user_name = "" or 1=1 LIMIT 0,1 --" AND password = "password"</code></p>
+				<p>This query would log the hacker in as the first user in the database! They could then iterate over each user by adjusting the <code>LIMIT</code> parameters allowing them to extract all of the information for every user in the database. Ouch.</p>
+				<p>While not possible with PHP some languages support batch queries which are even more dangerous. Here is an example where a hacker has entered <code>"; DROP TABLE users --</code> for the user name and <code>password</code> for the password which creates the following query.</p>
+				<p><code>SELECT user_id FROM users WHERE user_name = ""; DROP TABLE users --" AND password = "password"</code></p>
+				<p>Say godbye to the users table, because it was just deleted!</p>
+				
+				<h2>How to Prevent SQLi</h2>
+				<p>So we all know now that SQLi is very common and very bad. So how can it be prevented? The following list shows the best steps to be taken to prevent SQLi from most important to least important, but remember these should all be done!</p>
+				
+				<h3>Use Prepared Statements</h3>
+				<p>Also called parameterized queries, prepared statements are a way to tell the SQL interpreter what parts of a submitted query should be treated as commands and what parts should be treated as data. This is the single most important step that can be taken to prevent SQLi. In PHP a prepared statement would be created like this.</p>
+				<figure class='code'>
+					<p>
+						<span>$query = $db->prepare("SELECT user_id FROM users WHERE user_name = :user_name AND password = :password");</span>
+						<span>$query->bindParam(':user_name', $un);</span>
+						<span>$query->bindParam(':password', $pw);</span>
+					</p>
+					<figcaption>A simple prepared statement in PHP to log in a user.</figcaption>
+				</figure>
+				<p>The submitted strings will be treaded as string literals and not control characters. So, if a hacker sent <code>" or 1=1 LIMIT 0,1 --</code> to this code as the user name the DBMS would search the users table for a user name that matches this string, which of course it would not. Problem solved.</p>
+
+				<h3>Use Stored Procedures</h3>
+				<p>Stored procedures are very similar to prepared statements in that they separate user supplied data from program control so that all submitted data is treated as just data. However, stored procedures are created, compiled, and stored for later use. So if a program has a pagination script that creates a query in the exact same way over and over again a stored procedure could be created which will provide the security benefits of a prepared statement in addition to the performance benefits of compiled queries stored on the server. Stored procedures also help with the don't repeat yourself (DRY) principle by centralizing common SQL code and establishing a common API for programs to use. Stored procedures should not be used for creating dynamic SQL commands under ordinary circumstances, such as if a user is searching a database using numerous optional fields to create a query such as <code>SELECT * FROM products WHERE cat='jewelry' AND sub_cat='engagement_rings' AND dia_size BETWEEN 1.0 AND 1.5</code>. Here is a simple example of a stored procedure for displaying a user's information and how it could be accessed from a PHP script. It takes a single parameter, a user id, and then returns all of the users information.</p>
+				<figure class='code'>
+					<p>
+						<span>DELIMITER //</span>
+						<span>CREATE PROCEDURE get_user_info</span>
+						<span>(IN u_id INT)</span>
+						<span>BEGIN</span>
+							<span class='t1'>SELECT * FROM users</span>
+							<span class='t1'>WHERE user_id = u_id;</span>
+						<span>END //</span>
+						<span>DELIMITER ;</span>
+					</p>
+					<figcaption>An example of a creating a simple stored procedure in SQL.</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>$user_id = $_POST['uid'];</span>
+						<span>$query_result = mysqli_query($db, "CALL get_user_info($user_id)");</span>
+					</p>
+					<figcaption>An example of a simple PHP script that accesses a stored procedure with a supplied user id.</figcaption>
+				</figure>
+				
+				<h3>Escape Input</h3>
+				<p>Before prepared statements became all the rage many programmers used white or black lists to determine which characters should be removed or escaped before being sent to a DBMS. While this method is prone to error and is not a proper replacement for prepared statements it is still a good practice. Most DBMS have commands that can be ran on incoming data to escape control characters before being appended to a query string. In PHP two popular commands are addslashes and mysqli_real_escape_string which both escape special control characters before being sent to the DBMS. Using the example from earlier if a user submitted <code>" or 1=1 LIMIT 0,1 --</code> for the user name it would be converted to the following <code>\" or 1=1 LIMIT 0,1 --</code> which would result in a query of <code>SELECT user_id FROM users WHERE user_name = "\" or 1=1 LIMIT 0,1 --" AND password = "Sakura"</code> which would obviously return zero results, which is the behavior that is desired.</p>
+				<p>Also, remember to escape data for any HTML which a hacker my try to inject into data that will then be displayed and possibly ran later when accessed. In PHP the htmlspecialchars function is used to filter HTML data. If a hacker submitted <code>&lt;script type='text/javascript' src='destroy.js'&gt;&lt;/script&gt;</code> it would become the innocuous string <code>&amp;lt;script type='text/javascript' src='destroy.js'&amp;gt;&amp;lt;/script&amp;gt;</code></p>
+				<p>Again it is all about separating literal values from code and making sure that an application communicates these differences to the software it connects to whether it is a DBMS or browser.</p>
+				
+				<h3>Validate Input</h3>
+				<p>Even when using prepared statements all user supplied data should be checked to make sure it is well formed and matches what is expected. This protects the integrity of the database by only allowing proper data to be inserted and also prevents code from being inserted into text fields, saved into a database, and then displayed and unintentionally ran by other users once accessed by a script later. Also, data should always be validated at the server even if it is already validated by a JavaScript API. A hacker could easily circumvent JavaScript validation and submit malformed data to the server. Some important checks are:</p> 
+				<p><em>Size or Length</em>. Is the string or number submitted the right length? For example a SHA-1 digest should be forty characters in length. Also, database schema often place limits on each column so if data is submitted which has a length greater than that taken by the database how should that data be handled? Should it be truncated, generate an error, or allow for the field to be modified? What would happen if a user submitted a binary file in the megabytes for a text field?</p>
+				<p><em>Type</em>. If a program is expecting a number it should not accept a string and certainly not any code.</p>
+				<p><em>Business Logic or Patterns</em>. Phone numbers should be ten digits possibly separated by parentheses or dashes, names should be alphabetic, and so on. Make sure all submitted data matches the patterns expected.</p>
+
+				<h3>Use Custom Error Statements</h3>
+				<p>Custom error statements should be used when trying to run queries against a DBMS. This prevents intimate details about the database configuration from being displayed to hackers who can then use this information to help expedite their efforts. Usually error checking would be done within try catch blocks, but here is a very common way in which PHP scripts 'catch' SQL errors and generate a custom error page</p>	
+				<figure class='code'>
+					<p>
+						<span>// this query will fail //</span>
+						<span>$query = 'SELECT * FROM TABLE users where user_name="Dustin" and password="Sakura"';</span>
+						<span>$result = mysqli_query($db, $query);</span>
+						<span>if($result === false) {</span>
+						<span class='t1'>display_failed_query_page();</span>
+						<span>}</span>
+					</p>
+					<figcaption>An example of simple error catching in PHP when doing SQL queries.</figcaption>
+				</figure>
+
+				<h3>Give Least Privilege to Database Users</h3>
+				<p>Taking the steps above will prevent almost all potential SQLi, however, there are many very sophisticated ways to hack servers of which SQLi is only one. To help protect against unknown future threats posed by software bugs or other avenues of attach always give the least privileges possible to users that access a database. If part of a program is used to only view data then create a seperate database user for that program that can only view data and not alter, add, or delete data. Also, if a script only needs access to a certain table or maybe just a part of a table limit that program's dabase user to only that table or even a view of the table. This limits the access of programs which access a database and therefore how much data is exposed to unauthorized access or deletion.</p>
+
+				<h2>Conclusion</h2>
+				<p>So while SQLi is a major threat to servers everywhere it is not an unmanageable threat. If all programs that accept user input to generate dynamic SQL statements use prepared statements, stored procedures, input escaping, input validation, custom error statements, and the principle of least privilege then SQLi will go from big deal to no problem.</p>
+
+				<h2>References</h2>
+				<ol>
+					<li><a href='http://dev.mysql.com/doc/connector-net/en/connector-net-tutorials-stored-procedures.html' target='_blank'>MySQL Working with Stored Procedures</a></li>
+					<li><a href='https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet' target='_blank'>OWASP Query Parameterization Cheat Sheet</a></li>
+					<li><a href='https://www.owasp.org/index.php/SQL_Injection' target='_blank'>OWASP SQL Injection</a></li>
+					<li><a href='https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet' target='_blank'>OWASP SQL Injection Prevention Cheat Sheet</a></li>
+					<li><a href='http://www.troyhunt.com/2013/07/everything-you-wanted-to-know-about-sql.html' target='_blank'>Troy Hunt's Everything you wanted to know about SQL injection (but were afraid to ask)</a></li>
+					<li><a href='http://www.troyhunt.com/2010/05/owasp-top-10-for-net-developers-part-1.html' target='_blank'>Troy Hunt's OWASP Top 10 for .Net Developers Part 1: Injection</a></li>
+					<li><a href='http://www.w3schools.com/sql/sql_injection.asp' target='_blank'>W3Schools SQL Injection</a></li>
+					<li><a href='http://en.wikipedia.org/wiki/SQL_injection' target='_blank'>Wikipedia SQL Injection</a></li>
+				</ol>
+			</div>
+		</main>
+		<footer>
+			<p>&copy; 2014 Dustin Snyder All Rights Reserved.</p>
+		</footer>
+	</body>
+</html> 

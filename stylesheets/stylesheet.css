@@ -204,7 +204,6 @@ img {
 	text-align: left;
 	margin-left: 0;
 	font-family: monospace;
-	
 }
 .code span { display: block; }
 .t1 { margin-left: 2em; }
@@ -213,4 +212,13 @@ img {
 figcaption {
 	border: 2px solid #000;
 	padding: 1px;
+}
+
+code {
+	padding: 1px;
+	background-color:#e3e3e3;
+}
+
+ol {
+	text-align: left;
 }
