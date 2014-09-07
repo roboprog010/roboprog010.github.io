@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type='text/css' rel='stylesheet' href='../../stylesheets/stylesheet.css' />
+		<title>Active Record in Ruby</title>
+	</head>
+	<body>
+		<nav id='table_of_contents'>
+			<a href='../../index.html'>Back to Table of Contents</a>
+		</nav>
+		<main>
+			<div class='post'>
+				<h1>Active Record in Ruby</h1>
+				<p>
+					Active Record is an Object Relational Mapping (ORM) implementation, which basically means that it provides an interface between Ruby objects and a database such as MySQL. ORM application programming interfaces (API) such as Active Record were created to solve the problem of saving object data in relational databases. This problem exists because relational databases save everything as tables consisting of atomic values such as strings or integers while objects save data along with methods to act upon that data in a data group called a class. Therefore there is no direct translation from object to table and back again. That is what ORM API do. They map classes to tables, properties to columns, objects to rows, and instance properties to individual cells. Once this mapping has been established programmers can work solely within Ruby using classes, objects, properties, and methods and rarely if ever interact directly with the underlying database using SQL statements. 
+				</p>
+				<p>
+					This is accomplished by using the concept of convention over configuration. This is a two setup process. First, each class that needs to interact with an underlying database is setup as a child of the ActiveRecord::Base class which gives it access to a whole bunch of really useful inherited methods to access and manipulate the database. Second, each class that is to become a child of ActiveRecord::Base should be setup using the conventions established by ActiveRecord so that very little configuration has to be done. These include naming classes in the singular and with camel case such as RubyProgrammer and naming it's matching table in the plural and with snake case such as ruby_programmers. Some other conventions are that foreign keys should be singularized_table_name_id such as ruby_programmer_id and special columns like created_at and updated_at can be used to track when a row was, well, created or updated. Once this is done Active Record uses a very intuitive system to match classes with tables and properties with columns so that create, read, update, and delete (CRUD) operations can be done easily on tables within the database. Some examples are:
+				</p>
+				<h2>Setup</h2>
+				<figure class='code'>
+					<p>
+						<span>class RubyProgrammer &lt; ActiveRecord::Base</span>
+						<span>end</span>
+					</p>
+					<figcaption>Create a ruby class that inherits from the ActiveRecord::Base class. This is required to use ActiveRecord methods to access a database.</figcaption>
+				</figure>
+				<h2>Create</h2>
+				<figure class='code'>
+					<p>
+						<span>rp = RubyProgrammer.new({fist_name: 'Dustin', last_name: 'Snyder'})</span>
+						<span>rp.save</span>
+					</p>
+					<figcaption>Create a RubyProgrammer object and then save it to a database.</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>rp = RubyProgrammer.create({fist_name: 'Dustin', last_name: 'Snyder'})</span>
+					</p>
+					<figcaption>Create a ruby object and save it to a database in a single statement.</figcaption>
+				</figure>
+				<h2>Read</h2>
+				<figure class='code'>
+					<p>
+						<span>results = RubyProgrammer.all</span>
+					</p>
+					<figcaption>Get the entire contents of the ruby_programmers table as an array.</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>rp = RubyProgrammer.first</span>
+					</p>
+					<figcaption>Get the first row from the ruby_programmers table.</figcaption>
+				</figure>
+				<figure class='code'>
+					<p>
+						<span>rp = RubyProgrammer.where(:first_name 'Liam')</span>
+					</p>
+					<figcaption>Get all of the rows from the table ruby_programmers where the column first_name has the value 'Liam'.</figcaption>
+				</figure>
+				<h2>Update</h2>
+				<figure class='code'>
+					<p>
+						<span>rp = RubyProgrammer.where(:first_name 'Dustin')</span>
+						<span>rp.first_name = 'Liam'</span>
+						<span>rp.save</span>
+					</p>
+					<figcaption>Get all of the rows from the table ruby_programmers where the column first_name has the value 'Dustin' and then change them to 'Liam'.</figcaption>
+				</figure>
+				<h2>Delete</h2>
+				<figure class='code'>
+					<p>
+						<span>rp = RubyProgrammer.where(:first_name 'Dustin')</span>
+						<span>rp.destroy</span>
+					</p>
+					<figcaption>Get all of the rows from the table ruby_programmers where the column first_name has the value 'Dustin' and then delete them.</figcaption>
+				</figure>
+				<h2>Conclusion</h2>
+				<p>
+					As can be seen in the preceding examples the ActiveRecord ORM API makes querying the database extremely easy. This functionality can also be extended to any class simply by making that class a child of the ActiveRecord::Base class. No more opening and closing databases, writing escaping functions, or creating custom queries to access tables for each and every class that is created. Active Record makes the translation from object to row and back again seamless and easy and to top it all off programmers never have to leave Ruby and it's object oriented language to do so.
+				</p>
+				<h2>References</h2>
+				<p>
+					<ul>
+						<li><a href='http://rubylearning.com/satishtalim/ruby_activerecord_and_mysql.html' target='_blank'>Ruby Learning: Ruby ActiveRecord and MySQL</a></li>
+						<li><a href='http://guides.rubyonrails.org/active_record_basics.html' target='_blank'>Ruby on Rails: Active Record Basics</a></li>
+						<li><a href='http://rubymonk.com/learning/books/10-understanding-rails-alpha/chapters/69-a-whirlwind-of-rails/lessons/167-getting-started-with-activerecord' target='_blank'>Ruby Monk: Getting Started With Active Record</a></li>
+						<li><a href='http://en.wikipedia.org/wiki/Active_record_pattern' target='_blank'>Wikipedia: Active record pattern</a></li>
+						<li><a href='http://en.wikipedia.org/wiki/Object-relational_mapping' target='_blank'>Wikipedia: Object-Relational Mapping</a></li>
+					</ul>
+				</p>
+			</div>
+		</main>
+		<footer>
+			<p>&copy; 2014 Dustin Snyder All Rights Reserved.</p>
+		</footer>
+	</body>
+</html> 
