@@ -2,5 +2,25 @@
 	width: 960px;
 	margin: 0 auto;
 	text-align: center;
-	background-color: #ccc;
 }
+.col {
+	float: left;
+	width: 40%;
+	text-align: left;
+	margin-right: 9%;
+}
+.box {
+	margin: 10px 0;
+	padding: 0 10px 10px 10px;
+	border: 1px solid #333;
+	background-color: #eee;
+}
+.code {	
+	font-family: monospace; 
+	background-color: #000;
+	color: #fff;
+	padding: 10px;
+}
+span { 	display: block; }
+.t1 { margin-left: 10px; }
+.t2 { margin-left: 20px; }

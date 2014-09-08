@@ -1,74 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<!--<link type='text/css' rel='stylesheet' href='reset.css'>-->
 		<link type='text/css' rel='stylesheet' href='screen.css'>
 		<title>JavaScript Object Cheatsheet</title>
 	</head>
 	<body>
 		<div id='container'>
 			<h1>JavaScript Object Cheatsheet</h1>
-			
+			<div class='col'>
+				<div class='box'>
+					<h2>Literal Syntax</h2>
+					<div class='sub_box'>
+						<h3>Create an Object</h3>
+						<div class='code'>
+							<span>var ship = {};</span>
+						</div>
+					</div>
+					<div class='sub_box'>
+						<h3>Create an Object with Properties and Methods</h3>
+						<div class='code'>
+							<span>var ship = {</span>
+								<span class='t1'>className: 'fighter',</span>
+								<span class='t1'>fireMissle: function() {</span>
+									<span class='t2'>// code to fire missle</span>
+								<span class='t1'>}</span>
+							<span >};</span>
+						</div>
+					</div>
+					<div class='sub_box'>
+						<h3>Add Properties</h3>
+						<div class='code'>
+							<span>ship.className = 'fighter';</span>
+						</div>
+					</div>
+					<div class='sub_box'>
+						<h3>Add Methods</h3>
+						<div class='code'>
+							<span>ship.fireMissle = function() {</span>
+								<span class='t1'>// code to fire missle</span>
+							<span>};</span>
+						</div>
+					</div>
+				</div>
+				<div class='box'>
+					<h2>Accessing Properties and Methods</h2>
+					<div class='sub_box'>
+						<h3>Properties</h3>
+						<div class='code'>
+							<span>ship.className;</span>
+							<span>ship['className'];</span>
+						</div>
+					</div>
+					<div class='sub_box'>
+						<h3>Methods</h3>
+						<div class='code'>
+							<span>ship.fireMissle();</span>
+						</div>
+					</div>
+				</div>
+				<div class='box'>
+					<h2>Removing Properties</h2>
+					<div class='sub_box'>
+						<div class='code'>
+							<span>delete ship.className;</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='col'>
+				<div class='box'>
+					<h2>Object Create Method</h2>
+					<div class='sub_box'>
+						<div class='code'>
+							<span>var FighterShip = {</span>
+								<span class='t1'>className: 'fighter',</span>
+								<span class='t1'>fireMissle: function() {</span>
+									<span class='t2'>// code to fire missle</span>
+								<span class='t1'>}</span>
+							<span>};</span>
+							<span>var ship_x1 = Object.create(FighterShip);</span>
+						</div>
+					</div>
+				</div>
+				<div class='box'>
+					<h2>Constructor Function</h2>
+					<div class='sub_box'>
+						<div class='code'>
+							<span>function Ship (className) {</span>
+								<span class='t1'>this.className = className;</span>
+								<span class='t1'>this.fireMissle = function() {</span>
+									<span class='t2'>// code to fire missle</span>
+								<span class='t1'>};</span>
+							<span>}</span>
+							<span>ship = new Ship('fighter');</span>
+						</div>
+					</div>
+				</div>
+				<div class='box'>
+					<h2>Looping</h2>
+					<div class='sub_box'>
+						<div class='code'>
+							<span>for (var key in ship) {</span>
+								<span class='t1'>console.log(key + ' ' + ship[key]);</span>
+							<span>}</span>
+						</div>
+					</div>
+				</div>
+				<div class='box'>
+					<h2>Prototyping</h2>
+					<div class='sub_box'>
+						<div class='code'>
+							<span>Ship.prototype.missleCount = 10;</span>
+							<span>Ship.prototype.missleDisplay = function() {</span>
+								<span class='t1'>// code to display missle count</span>
+							<span>};</span>
+						</div>
+					</div>
+				</div>
+				<div class='box'>
+					<h2>Comparing Objects</h2>
+					<div class='sub_box'>
+						<p>
+							Object variables are reference types and therefore cannot be compared using a standard test of equality. A custom function or method must be created to iterate over each property of two objects and compare their values one to one.
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
-
-<!--
-Definition
-An object is a data type that contains both properties (data) and methods (functions) and is ususally used to represent the features and abilities of an object. These objects can be as concrete as a person or as abstract as a database connection. For example a ship object can have a 
-
-Literal Syntax
-var ship = {};
-var ship = new Object();
-ship.className = 'fighter'; // adds a new property and value to the ship object
-ship.fireMissle = function() { 
-	// code to fire missle 
-}; // adds a new function to the ship object
-
-
-var ship = {
-	className: 'fighter',
-	fireMissle: function() {
-		// code to fire missle
-	}
-}; // don't forget this semicoln!
-ship.className; // access object property className
-ship['className']; // access object property className using array notation
-ship.fireMissle(); // access object function fireMissle
-
-var FighterShip = {
-	className: 'fighter',
-	fireMissle: function() {
-		// code to fire missle
-	}
-};
-var ship_x1 = Object.create(FighterShip);
-
-var speedometer = function() {
-	// code to show current speed
-};
-ship.showSpeed = speedometer;
-
-Constructor Function
-function Ship (className) {
-	this.className = className;
-	this.fireMissle = function() { 
-		// code to fire missle 
-	}; // adds a new function to the ship object
-}
-ship = new Ship('fighter'); // creats a new instance of the class Ship
-
-Looping
-for (var key in ship) {
-	console.log(key + ' ' + ship[key]); // prints out each key value pair in the ship object
-}
-
-Prototyping
-Ship.prototype.missleCount = 10; // adds missleCount to all objects of the Ship class
-Ship.prototype.missleDisplay = function() { // code to display missle count } // adds the missleDisplay function to all objects of the Ship class
-
-Removing Properties
-delete ship.className;
-
-Comparing Objects
-Object variables are reference types and therefore cannot be compared using a standard test of equality. A custom function or method must be created to iterate over each property of two objects and compare their values one to one.
--->
