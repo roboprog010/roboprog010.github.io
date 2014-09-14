@@ -222,3 +222,11 @@ code {
 ol {
 	text-align: left;
 }
+
+.question {
+	font-weight: bold;
+}
+
+.lesson {
+	font-style: italic;
+}
